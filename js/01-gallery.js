@@ -1,6 +1,6 @@
 import { galleryItems } from './gallery-items.js';
 // Change code below this line
-
+0
 console.log(galleryItems);
 
 const galleryEl = document.querySelector('.gallery');
@@ -28,26 +28,27 @@ function createCardsGallery(galleryItems) {
 function handleClickOnCards(e) {
   e.preventDefault();
 
-  const modal = basicLightbox.create(`
-   <div class="modal">
-    <img
-      class="gallery__image"
-      src="${e.target.dataset.source}"/>
-   </div>
-`)
-  console.log(modal.show());
-
-  if (modal.show()) {
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') {
-       modal.close(() => console.log('lightbox close'))
-    }
-    });
-  }
-  
   if (e.target.NodeName === 'IMG') {
-    return modal;
-  } else {
-    return;
+   return;
+  };
+ 
+  const modal = basicLightbox.create(`
+    <img
+      src="${e.target.dataset.source}"/>
+`, {
+    onShow: modal => {
+      document.addEventListener('keydown', handleEsc);
+    },
+    onClose: modal => {
+      document.removeEventListener('keydown', handleEsc);
+    }
+  });
+
+  function handleEsc(e) {
+    if (e.key === 'Escape') {
+      modal.close(() => console.log('lightbox close'))
+    }
   }
+
+  console.log(modal.show());
 }
